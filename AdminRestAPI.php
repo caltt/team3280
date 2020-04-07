@@ -25,7 +25,7 @@ $hasExisted = false;
 if ($requestData->resource == 'admin') {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // check if adminId already existed
-        $admins = AdminLoginDAO::getAdmins();
+        $admins = AdminDAO::getAdmins();
         foreach ($admins as $admin){
             if ($requestData->adminId == $admin->getAdminUserId()){
                 $hasExisted = true;
@@ -36,13 +36,7 @@ if ($requestData->resource == 'admin') {
 
         // if adminId doesn't exist, insert data to adminLogin
         if (!$hasExisted){
-            
-            $newAdminLogin = new AdminLogin();
-            $newAdminLogin->setAdminUserId($requestData->adminId);
-            $newAdminLogin->setAdminPassword($requestData->password);
-            // insert to adminLogin
-            $resultLogin = AdminLoginDAO::createAdmin($newAdminLogin);
-            
+                        
             $newAdmin = new Admin();
             $newAdmin->setAdminUserId($requestData->adminId);
             $newAdmin->setFirstName($requestData->firstName);
@@ -51,25 +45,74 @@ if ($requestData->resource == 'admin') {
             $newAdmin->setPhone($requestData->phone);
             $newAdmin->setCompanyName($requestData->companyName);
             // insert to admin
-            $resultAdmin = AdminDAO::createAdmin($newAdmin);
+            $result = AdminDAO::createAdmin($newAdmin);
+
             header('Content-Type: application/json');
-            echo json_encode($resultLogin);  
+            echo json_encode($result);  
         }
     }
 
     if ($_SERVER['REQUEST_METHOD'] == 'GET'){
-        if (isset($requestData->id)){
+        if (isset($requestData->adminId)){
             // get one
+            $admin = AdminDAO::getAdmin($requestData->adminId);
 
+            header('Content-Type: application/json');
+            echo json_encode($admin->jsonSerialize());  
         }else{
             // get all
+        }
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
+        if (isset($requestData->adminId)){
+            // only when an id is provided
+            // if (!isset)
+            $newAdmin = new Admin();
+            $newAdmin->setAdminUserId($requestData->adminId);
+            $newAdmin->setFirstName($requestData->firstName);
+            $newAdmin->setLastName($requestData->lastName);
+            $newAdmin->setEmail($requestData->email);
+            $newAdmin->setPhone($requestData->phone);
+            $newAdmin->setCompanyName($requestData->companyName);
+            $result = AdminDAO::updateAdmin($newAdmin);
+
+            header('Content-Type: application/json');
+            echo json_encode($result);  
         }
     }
 }
 
 if ($requestData->resource == 'adminLogin'){
-    if ($_SERVER['REQUEST_METHOD'] == 'GET' ){
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' ){
+        $newAdminLogin = new AdminLogin();
+        $newAdminLogin->setAdminUserId($requestData->adminId);
+        $newAdminLogin->setAdminPassword($requestData->password);
+        // insert to adminLogin
+        $result = AdminLoginDAO::createAdmin($newAdminLogin);
 
+        header('Content-Type: application/json');
+        echo json_encode($result);  
+    }
+    if ($_SERVER['REQUEST_METHOD'] == 'GET'){
+        if (isset($requestData->adminId)){
+            // get one
+            $adminLogin = AdminLoginDAO::getAdmin($requestData->adminId);
+
+            header('Content-Type: application/json');
+            echo json_encode($adminLogin->jsonSerialize());  
+        }
+    }
+    if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
+        if (isset($requestData->adminId)){
+            $newAdminLogin = new AdminLogin();
+            $newAdminLogin->setAdminUserId($requestData->adminId);
+            $newAdminLogin->setAdminPassword($requestData->password);
+            $result = AdminLoginDAO::updateAdmin($newAdminLogin);
+
+            header('Content-Type: application/json');
+            echo json_encode($result);  
+        }
     }
 }
 ?>

@@ -1,6 +1,11 @@
 <?php
 
-// signUpForm() by Tong
+// following are added by Tong:
+// signUp()   this one is RENAMED
+// showAdminInfo()  for test purpose, not for the content of admin homepage
+// updateAdmin()
+// editJob()  this one NOT done yet
+
 
 class Page{
     public static $_title = "Please set this Title";
@@ -36,7 +41,7 @@ static function footer() { ?>
 
 <?php }
 
-public static function signUpForm(){ ?>
+public static function signUp(){ ?>
     <form class="container w-25" action="" method="POST">
     <div>
         <span>Admin ID</span>
@@ -90,14 +95,48 @@ public static function signUpForm(){ ?>
             <input type="password" class="form-control" name="password"placeholder="Password">
         </div>
         <input type="submit" value="login">
+        <a href="signup.php" class="btn btn-primary">Sign Up</a>
         <input type="hidden" name="action" value="login">
     
         </form>
 
 <?php }
 
-    static function editAdmin($adminLogin, $admin){ ?>
-        <form class="container">
+    static function showAdminInfo($admin){ ?>
+        <div class="container text-center">
+        <p>for test</p>
+        <p>Welcome, <?=$admin->AdminUserId?>!</p>
+        <table class="table">
+            <tr>
+                <td>First name:</td>
+                <td><?=$admin->FirstName?></td>
+            </tr>
+            <tr>
+                <td>Last name:</td>
+                <td><?=$admin->LastName?></td>
+            </tr>
+            <tr>
+                <td>Phone:</td>
+                <td><?=$admin->Phone?></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><?=$admin->Email?></td>
+            </tr>
+            <tr>
+                <td>Company:</td>
+                <td><?=$admin->CompanyName?></td>
+            </tr>
+        </table>
+        <a href="updateAdmin.php" class="btn btn-primary">Update Admin Info</a>
+        <a href="loggedout.php" class="btn btn-primary">Log out</a>
+        </div>
+
+<?php }
+
+    static function updateAdmin($admin){ ?>
+        <p>Leave all password fields blank if you are not changing it.</p>
+        <form class="container" method="POST">
         <div>
             <span>Old password</span>
             <input class="form-control" type="password" name="oldPassword">
@@ -108,9 +147,30 @@ public static function signUpForm(){ ?>
         </div>
         <div>
             <span>Confirm new password</span>
-            <input class="form-control" type="password" name="confirmedPassword" value="<?=$admin->getCompanyName()?>">
+            <input class="form-control" type="password" name="confirmedPassword">
         </div>
-        <button class="btn btn-primary" type="submit" name="action" value="editAdmin">Edit</button>
+        <div>
+            <span>First Name</span>
+            <input class="form-control" type="text" name="firstName" value="<?=$admin->FirstName?>">
+        </div>
+        <div>
+            <span>Last Name</span>
+            <input class="form-control" type="text" name="lastName" value="<?=$admin->LastName?>">
+        </div>
+        <div>
+            <span>Email</span>
+            <input class="form-control" type="text" name="email" value="<?=$admin->Email?>">
+         </div>
+         <div>
+            <span>Phone</span>
+            <input class="form-control" type="text" name="phone" value="<?=$admin->Phone?>">
+        </div>
+        <div>
+            <span>Company Name</span>
+            <input class="form-control" type="text" name="companyName" value="<?=$admin->CompanyName?>">
+        </div>
+        <button class="btn btn-primary" type="submit" name="action" value="updateAdmin">Edit</button>
+        <a href="pro.corona.php" class="btn btn-primary">Home</a>
         </form>
 
 <?php }

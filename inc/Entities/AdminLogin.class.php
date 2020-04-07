@@ -1,4 +1,8 @@
 <?php
+
+// Tong
+// jsonSerialize() added
+
 class AdminLogin{
 
     // // AdminUserId VARCHAR(45) NOT NULL UNIQUE,
@@ -10,6 +14,7 @@ class AdminLogin{
     private $AdminUserId="";
     private $AdminPassword="";
     
+
 
     //Setter
     public function setAdminUserId($newAdminUserId) {
@@ -31,6 +36,11 @@ class AdminLogin{
     public function verifyAdminPassword(string $passwordToVerify) {
         return password_verify($passwordToVerify, $this->AdminPassword);
     }
+
+    public function jsonSerialize(){
+        return get_object_vars($this); 
+    }
+
 }
 
 ?>

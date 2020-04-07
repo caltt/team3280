@@ -21,19 +21,29 @@ if (!empty($_POST) && $_POST['action'] == 'createAdmin'){
         $postData = [
             'resource' => 'admin',  // specify what resource to deal with
             'adminId' => $_POST['adminId'],
-            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
             'firstName' => $_POST['firstName'],
             'lastName' => $_POST['lastName'],
             'email' => $_POST['email'],
             'phone' => $_POST['phone'],
             'companyName' => $_POST['companyName'],
         ];
-        $result = AdminRestClient::call('POST', $postData);
-        var_dump($result);
-        if (is_numeric($result)){
+        $resultAdmin = AdminRestClient::call('POST', $postData);
+
+        var_dump($resultAdmin);
+
+        // if insert admin successful
+        // insert adminLogin accordingly
+        if (is_numeric($resultAdmin)){
+            $postData = [
+                'resource' => 'adminLogin',
+                'adminId' => $_POST['adminId'],
+                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+            ];
+            AdminRestClient::call('POST', $postData);
+            // report success
             echo 'Admin ' . $_POST['adminId'] . ' signed up.';
         }else{
-            echo $result;
+            echo $resultAdmin;
         }
     }
 }
@@ -41,7 +51,7 @@ if (!empty($_POST) && $_POST['action'] == 'createAdmin'){
 
 Page::$_title = 'Sign up';
 Page::header();
-Page::signUpForm();
+Page::signUp();
 Page::footer();
 
 

@@ -1,6 +1,7 @@
 <?php
 
 // createAdmin() by Tong
+// updateAdmin() by Tong
 // getter coded by Robert
 
 class AdminLoginDAO{
@@ -26,7 +27,7 @@ class AdminLoginDAO{
 
   static function getAdmin(string $userName) {
     //Query!
-    $sql = "SELECT * FROM AdminAccount WHERE AdminUserId = :adminuserid ;";
+    $sql = "SELECT * FROM AdminAccount WHERE AdminUserId = :adminuserid;";
     self::$_db->query($sql);
     //Bind!
     self::$_db->bind(":adminuserid",$userName);
@@ -45,6 +46,17 @@ class AdminLoginDAO{
     self::$_db->bind(':adminpassword', $newAdminLogin->getAdminUserPassword());
     self::$_db->execute();
     return self::$_db->lastInsertedId();
+  }
+
+  static function updateAdmin(AdminLogin $newAdminLogin){
+    $sql = 'UPDATE adminaccount 
+            SET AdminPassword = :password
+            WHERE AdminUserId = :id;';
+    self::$_db->query($sql);
+    self::$_db->bind(':id', $newAdminLogin->getAdminUserId());
+    self::$_db->bind(':password', $newAdminLogin->getAdminUserPassword());
+    self::$_db->execute();
+    return self::$_db->rowCount();
   }
 }
 

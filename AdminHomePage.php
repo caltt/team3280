@@ -3,6 +3,9 @@
 // by Tong
 // not finished
 
+require_once "inc/config.inc.php";
+
+require_once "inc/Utilities/AdminRestClient.php";
 require_once "inc/Utilities/LoginManager.php";
 require_once "inc/Utilities/Page.class.php";
 
@@ -14,13 +17,14 @@ if (!LoginManager::verifyLogin()){
 
 Page::$_title = "Admin page";
 Page::header();
-echo 'Welcome, ' . ($_SESSION['loggedin']['username']);
+$data = [
+    'resource' => 'admin',
+    'adminId' => $_SESSION['loggedin']['username'],
+];
 
+$currentAdmin = AdminRestClient::call('GET', $data);
+Page::showAdminInfo($currentAdmin);
 
-?>
-<a href="editAdmin.php" class="btn btn-primary">Edit Admin Info</a>
-<a href="loggedout.php" class="btn btn-primary">Log out</a>
-<?php
 
 Page::footer();
 
